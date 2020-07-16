@@ -2,29 +2,49 @@
 
 // 발판을 생성하고 주기적으로 재배치하는 스크립트
 public class PlatformSpawner : MonoBehaviour {
-    public GameObject platformPrefab; // 생성할 발판의 원본 프리팹
-    public int count = 3; // 생성할 발판의 개수
+    public GameObject[] Platforms;
+    public int spawnIndex;
 
-    public float timeBetSpawnMin = 1.25f; // 다음 배치까지의 시간 간격 최솟값
-    public float timeBetSpawnMax = 2.25f; // 다음 배치까지의 시간 간격 최댓값
-    private float timeBetSpawn; // 다음 배치까지의 시간 간격
+    public Transform point;
+    float platform_Y;
+    public float YMax, YMin;
 
-    public float yMin = -3.5f; // 배치할 위치의 최소 y값
-    public float yMax = 1.5f; // 배치할 위치의 최대 y값
-    private float xPos = 20f; // 배치할 위치의 x 값
-
-    private GameObject[] platforms; // 미리 생성한 발판들
-    private int currentIndex = 0; // 사용할 현재 순번의 발판
-
-    private Vector2 poolPosition = new Vector2(0, -25); // 초반에 생성된 발판들을 화면 밖에 숨겨둘 위치
-    private float lastSpawnTime; // 마지막 배치 시점
-
+    public float count;
+    float times;
 
     void Start() {
-        // 변수들을 초기화하고 사용할 발판들을 미리 생성
+        SpawnPlatforms();
+        spawnIndex = 1;
+        times = count;
     }
 
     void Update() {
-        // 순서를 돌아가며 주기적으로 발판을 배치
+
+        if (times>0)
+            times -= Time.deltaTime;
+        if (times <= 0)
+            SpawnPlatforms();
+
+        for(int i = 0; i < 3; i++)
+        {
+            if (Platforms[i].transform.position.x < -15.5f)
+            {
+                Platforms[i].SetActive(false);
+            }
+        }
+    }
+    public void SpawnPlatforms()
+    {
+        Platforms[spawnIndex].transform.position = point.transform.position + new Vector3(0, platform_Y, 0);
+        Platforms[spawnIndex].SetActive(true);
+        Platform p = Platforms[spawnIndex].GetComponent<Platform>();
+        p.StepReset();
+
+        platform_Y = Random.Range(YMin, YMax);
+        if (spawnIndex >= 2)
+            spawnIndex = 0;
+        else
+            spawnIndex++;
+        times = count;
     }
 }

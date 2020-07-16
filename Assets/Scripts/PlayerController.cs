@@ -1,10 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 public class PlayerController : MonoBehaviour {
-    public Text MyScore;
-    public float score;
     public AudioClip deathClip;
     public float jumpForce = 700f; 
 
@@ -22,7 +19,6 @@ public class PlayerController : MonoBehaviour {
 
     void Start()
     {
-        score = 0;
         rb2 = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         playerAudio = GetComponent<AudioSource>();
@@ -30,8 +26,6 @@ public class PlayerController : MonoBehaviour {
 
     void Update()
     {
-        score += Time.deltaTime;
-        MyScore.text = "Score : " + (int)score;
         isGrounded = Physics2D.OverlapCircle(transform.position + offset, radio, Ground);
 
         if (isDead)
@@ -62,6 +56,9 @@ public class PlayerController : MonoBehaviour {
         playerAudio.Play();
         rb2.velocity = Vector2.zero;
         isDead = true;
+        GameManager.instance.OnPlayerDead();
+
+
     }
    
     void OnDrawGizmos()
