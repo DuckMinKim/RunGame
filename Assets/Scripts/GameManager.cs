@@ -37,6 +37,9 @@ public class GameManager : MonoBehaviour {
         scoreText.text = "Score : " + score;
         if (isGameover && Input.GetMouseButtonDown(0))
             SceneManager.LoadScene(0);
+
+        if (Input.GetKey(KeyCode.Escape))
+            Application.Quit();
     }
 
     // 점수를 증가시키는 메서드

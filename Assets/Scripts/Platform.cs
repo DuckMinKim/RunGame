@@ -10,7 +10,7 @@ public class Platform : MonoBehaviour {
     }
 
     void OnCollisionEnter2D(Collision2D obj) {
-        if(obj.gameObject.tag == "Player")
+        if(obj.gameObject.tag == "Player"&& !stepped)
         {
             GameManager.instance.AddScore(1);
             stepped = true;
